@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b4243c2d262f43148a737e7a5e75475b" Name="Diagram1" >
+        <EntityTypeShape EntityType="Police.Employee" Width="1.5" PointX="3.375" PointY="0.5" />
+        <EntityTypeShape EntityType="Police.Support" Width="1.5" PointX="6.625" PointY="1.375" />
+        <InheritanceConnector EntityType="Police.Support" />
+        <EntityTypeShape EntityType="Police.Official" Width="1.5" PointX="3.375" PointY="2.875" />
+        <InheritanceConnector EntityType="Police.Official" />
+        <EntityTypeShape EntityType="Police.Clerk" Width="1.5" PointX="2" PointY="4.75" />
+        <InheritanceConnector EntityType="Police.Clerk" />
+        <EntityTypeShape EntityType="Police.Cop" Width="1.5" PointX="5" PointY="4.75" />
+        <InheritanceConnector EntityType="Police.Cop" />
+        <EntityTypeShape EntityType="Police.Rank" Width="1.5" PointX="7.625" PointY="4.375" />
+        <AssociationConnector Association="Police.CopRank" />
+        <EntityTypeShape EntityType="Police.Specialty" Width="1.5" PointX="1.5" PointY="1.875" />
+        <AssociationConnector Association="Police.ClerkSpecialty" />
+        <EntityTypeShape EntityType="Police.Station" Width="1.5" PointX="10" PointY="2.875" />
+        <AssociationConnector Association="Police.OfficialStation" />
+        <EntityTypeShape EntityType="Police.Division" Width="1.5" PointX="5.875" PointY="3" />
+        <AssociationConnector Association="Police.DivisionStation" />
+        <EntityTypeShape EntityType="Police.Equipment" Width="1.5" PointX="9.875" PointY="5.875" />
+        <AssociationConnector Association="Police.EquipmentStation" />
+        <EntityTypeShape EntityType="Police.Warrant" Width="1.5" PointX="7.125" PointY="6.5" />
+        <AssociationConnector Association="Police.WarrantCop" />
+        <AssociationConnector Association="Police.WarrantClerk" />
+        <AssociationConnector Association="Police.WarrantStation" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

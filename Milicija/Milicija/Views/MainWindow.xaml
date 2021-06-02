@@ -1,0 +1,322 @@
+﻿<Window x:Class="Milicija.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Milicija"
+        xmlns:models="clr-namespace:Milicija.Database"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        WindowStartupLocation="CenterScreen"
+        Height="400" Width="605">
+    <Window.Resources>
+        <Style x:Key="AddRemoveButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="LightSteelBlue" />
+            <Setter Property="Width" Value="50" />
+        </Style>
+
+        <Style x:Key="OkIconStyle" TargetType="Image">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Visibility" Value="Visible" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding StanjeKriticno}" Value="True">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="WarningIconStyle" TargetType="Image">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Visibility" Value="Collapsed" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding StanjeKriticno}" Value="True">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+
+        <Style x:Key="PutTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="Margin" Value="0,0,4,0" />
+        </Style>
+
+        <Style x:Key="PutBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="LightYellow" />
+        </Style>
+
+        <Style x:Key="ConfirmingBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="White" />
+        </Style>
+
+        <Style x:Key="CrudButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="60" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+
+        <Style x:Key="ConfirmingButtonsStyle" TargetType="Button">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="DockPanel.Dock" Value="Right" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Margin" Value="5,0,0,0" />
+        </Style>
+
+        <Style x:Key="ValidationTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="TextAlignment" Value="Left" />
+            <Setter Property="Text" Value="Invalid input" />
+            <Setter Property="FontSize" Value="7" />
+            <Setter Property="Foreground" Value="Red" />
+        </Style>
+    </Window.Resources>
+    <TabControl>
+        <TabItem Header="Zaposleni">
+            <DockPanel>
+                <Grid>
+                    <DockPanel Margin="10">
+                        <DockPanel 
+                            DockPanel.Dock="Top"
+                            Margin="0,0,0,10">
+                            <StackPanel
+                                DockPanel.Dock="Left"
+                                Orientation="Horizontal"
+                                Margin="0,0,0,10">
+                                <Button
+                                Content="Dodaj"
+                                Background="LightCyan"
+                                Command="{Binding Dodaj}"
+                                Style="{StaticResource CrudButtonStyle}"/>
+                                <Button
+                                Content="Izmeni"
+                                Background="LightGreen"
+                                Command="{Binding Izmeni}"
+                                Style="{StaticResource CrudButtonStyle}"/>
+                                <Button
+                                Content="Izbriši"
+                                Background="LightPink"
+                                Command="{Binding Izbrisi}"
+                                Style="{StaticResource CrudButtonStyle}"/>
+                                <Button
+                                Content="Odustani"
+                                Background="LightYellow"
+                                Command="{Binding Odustani}"
+                                Style="{StaticResource CrudButtonStyle}"/>
+                            </StackPanel>
+                            <ComboBox
+                                DockPanel.Dock="Right"
+                                MinWidth="100"
+                                Grid.Row="6"
+                                Grid.Column="1"
+                                ItemsSource="{Binding FilterTipoviSluzbenogLica}"
+                                SelectedItem="{Binding FilterTipoviSluzbenogLicaSelected, Mode=TwoWay}"
+                                DisplayMemberPath="Name"
+                                IsEnabled="{Binding FilterTipoviSluzbenogLicaEnabled}"
+                                Margin="0 0 10 0"/>
+                            <ComboBox
+                                DockPanel.Dock="Right"
+                                MinWidth="100"
+                                Grid.Row="6"
+                                Grid.Column="1"
+                                ItemsSource="{Binding FilterTipoviZaposlenog}"
+                                SelectedItem="{Binding FilterTipoviZaposlenogSelected, Mode=TwoWay}"
+                                DisplayMemberPath="Name"
+                                Margin="0 0 10 0"/>
+                            <Border></Border>
+
+                        </DockPanel>
+                        <Grid DockPanel.Dock="Left">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="150" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25" />
+                                <RowDefinition  Height="15" />
+                                <RowDefinition  Height="25" />
+                                <RowDefinition  Height="15" />
+                                <RowDefinition  Height="25" />
+                                <RowDefinition  Height="15" />
+                                <RowDefinition  Height="25" />
+                                <RowDefinition  Height="15" />
+                                <RowDefinition  Height="25" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Border
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Style="{StaticResource PutBorderStyle}">
+                                <TextBlock
+                                    Text="JMBG"
+                                    Style="{StaticResource PutTextBlockStyle}"/>
+                            </Border>
+                            <TextBox
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                IsEnabled="{Binding IDIsEnabled}"
+                                Text="{Binding Path=IDText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2" Height="25"  Grid.RowSpan="2" VerticalAlignment="Top">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="BorderBrush" Value="#FFABADB3" />
+                                        <Setter Property="BorderThickness" Value="1" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IDTextNijeValidan}" Value="True">
+                                                <Setter Property="BorderBrush" Value="Red" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{StaticResource ValidationTextBlockStyle}"
+                                Visibility="{Binding ValidationIDTextBlockVisibility}">
+                            </TextBlock>
+                            <Border
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Style="{StaticResource PutBorderStyle}">
+                                <TextBlock 
+                                    Text="Ime"
+                                    Style="{StaticResource PutTextBlockStyle}"/>
+                            </Border>
+                            <TextBox
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="BorderBrush" Value="#FFABADB3" />
+                                        <Setter Property="BorderThickness" Value="1" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding BrojNijeValidan}" Value="True">
+                                                <Setter Property="BorderBrush" Value="Red" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                            <TextBlock
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                Style="{StaticResource ValidationTextBlockStyle}"
+                                Visibility="{Binding ValidationBrojTextBlockVisibility}">
+                            </TextBlock>
+
+                            <Border
+                                Grid.Row="4"
+                                Grid.Column="0"
+                                Style="{StaticResource PutBorderStyle}">
+                                <TextBlock 
+                                    Text="Prezime"
+                                    Style="{StaticResource PutTextBlockStyle}"/>
+                            </Border>
+                            <TextBox
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                Text="{Binding Path=LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="BorderBrush" Value="#FFABADB3" />
+                                        <Setter Property="BorderThickness" Value="1" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding BrojNijeValidan}" Value="True">
+                                                <Setter Property="BorderBrush" Value="Red" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                            <TextBlock
+                                Grid.Row="5"
+                                Grid.Column="1"
+                                Style="{StaticResource ValidationTextBlockStyle}"
+                                Visibility="{Binding ValidationBrojTextBlockVisibility}">
+                            </TextBlock>
+
+                            <Border
+                                Grid.Row="6"
+                                Grid.Column="0"
+                                Style="{StaticResource PutBorderStyle}">
+                                <TextBlock 
+                                    Text="Tip zaposlenog"
+                                    Style="{StaticResource PutTextBlockStyle}"/>
+                            </Border>
+                            <ComboBox
+                                Grid.Row="6"
+                                Grid.Column="1"
+                                ItemsSource="{Binding TipoviPuta}"
+                                SelectedItem="{Binding TipoviPutaSelected, Mode=TwoWay}"
+                                DisplayMemberPath="Naziv"></ComboBox>
+
+                            <Border
+                                Grid.Row="8"
+                                Grid.Column="0"
+                                Style="{StaticResource PutBorderStyle}">
+                                <TextBlock 
+                                    Text="Tip sluzbenog lica"
+                                    Style="{StaticResource PutTextBlockStyle}"/>
+                            </Border>
+                            <ComboBox
+                                Grid.Row="8"
+                                Grid.Column="1"
+                                ItemsSource="{Binding TipoviPuta}"
+                                SelectedItem="{Binding TipoviPutaSelected, Mode=TwoWay}"
+                                DisplayMemberPath="Naziv"></ComboBox>
+                        </Grid>
+                        <ListView
+                            ItemsSource="{Binding ZaposleniSource}"
+                            SelectedItem="{Binding ZaposleniSourceSelected, Mode=TwoWay}"
+                            Margin="10,0,10,0">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="JMBG" Width="100" DisplayMemberBinding="{Binding JMBG}" />
+                                    <GridViewColumn Header="Ime" Width="100" DisplayMemberBinding="{Binding Name}" />
+                                    <GridViewColumn Header="Prezime" Width="100" DisplayMemberBinding="{Binding LastName}" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </DockPanel>
+
+                    <!--<Grid
+                        Visibility="{Binding ConfirmingMessageVisibility}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="17*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border
+                            Background="Black"
+                            Opacity="0.3" Grid.ColumnSpan="2">
+                        </Border>
+                        <Border
+                            Width="200"
+                            Height="100"
+                            Background="White" Grid.Column="1">
+                            <DockPanel Margin="10">
+                                <TextBlock
+                                    DockPanel.Dock="Top"
+                                    TextWrapping="Wrap"
+                                    TextAlignment="Center">Da li ste sigurni da želite da izbrišete tekući red?</TextBlock>
+                                <DockPanel>
+                                    <Button
+                                        Style="{StaticResource ConfirmingButtonsStyle}"
+                                        Command="{Binding BrisanjeOdustani}">NE</Button>
+                                    <Button
+                                        Style="{StaticResource ConfirmingButtonsStyle}"
+                                        Command="{Binding BrisanjePotvrdi}">DA</Button>
+                                    <Border
+                                        Style="{StaticResource ConfirmingBorderStyle}"/>
+                                </DockPanel>
+                            </DockPanel>
+                        </Border>
+                    </Grid>-->
+                </Grid>
+            </DockPanel>
+        </TabItem>
+    </TabControl>
+</Window>

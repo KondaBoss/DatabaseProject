@@ -1,0 +1,689 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Police.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="PoliceStoreContainer">
+    <EntitySet Name="Employees" EntityType="Police.Store.Employees" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Ranks" EntityType="Police.Store.Ranks" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Specialties" EntityType="Police.Store.Specialties" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Stations" EntityType="Police.Store.Stations" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Divisions" EntityType="Police.Store.Divisions" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Equipments" EntityType="Police.Store.Equipments" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Warrants" EntityType="Police.Store.Warrants" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Employees_Official" EntityType="Police.Store.Employees_Official" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Employees_Cop" EntityType="Police.Store.Employees_Cop" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Employees_Clerk" EntityType="Police.Store.Employees_Clerk" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Employees_Support" EntityType="Police.Store.Employees_Support" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="WarrantCop" EntityType="Police.Store.WarrantCop" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="WarrantClerk" EntityType="Police.Store.WarrantClerk" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="CopRank" Association="Police.Store.CopRank">
+      <End Role="Cop" EntitySet="Employees_Cop" />
+      <End Role="Rank" EntitySet="Ranks" />
+    </AssociationSet>
+    <AssociationSet Name="ClerkSpecialty" Association="Police.Store.ClerkSpecialty">
+      <End Role="Clerk" EntitySet="Employees_Clerk" />
+      <End Role="Specialty" EntitySet="Specialties" />
+    </AssociationSet>
+    <AssociationSet Name="OfficialStation" Association="Police.Store.OfficialStation">
+      <End Role="Official" EntitySet="Employees_Official" />
+      <End Role="Station" EntitySet="Stations" />
+    </AssociationSet>
+    <AssociationSet Name="DivisionStation" Association="Police.Store.DivisionStation">
+      <End Role="Division" EntitySet="Divisions" />
+      <End Role="Station" EntitySet="Stations" />
+    </AssociationSet>
+    <AssociationSet Name="EquipmentStation" Association="Police.Store.EquipmentStation">
+      <End Role="Equipment" EntitySet="Equipments" />
+      <End Role="Station" EntitySet="Stations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WarrantCop_Warrant" Association="Police.Store.FK_WarrantCop_Warrant">
+      <End Role="Warrant" EntitySet="Warrants" />
+      <End Role="WarrantCop" EntitySet="WarrantCop" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WarrantCop_Cop" Association="Police.Store.FK_WarrantCop_Cop">
+      <End Role="Cop" EntitySet="Employees_Cop" />
+      <End Role="WarrantCop" EntitySet="WarrantCop" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WarrantClerk_Warrant" Association="Police.Store.FK_WarrantClerk_Warrant">
+      <End Role="Warrant" EntitySet="Warrants" />
+      <End Role="WarrantClerk" EntitySet="WarrantClerk" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WarrantClerk_Clerk" Association="Police.Store.FK_WarrantClerk_Clerk">
+      <End Role="Clerk" EntitySet="Employees_Clerk" />
+      <End Role="WarrantClerk" EntitySet="WarrantClerk" />
+    </AssociationSet>
+    <AssociationSet Name="WarrantStation" Association="Police.Store.WarrantStation">
+      <End Role="Warrant" EntitySet="Warrants" />
+      <End Role="Station" EntitySet="Stations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Official_inherits_Employee" Association="Police.Store.FK_Official_inherits_Employee">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="Official" EntitySet="Employees_Official" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cop_inherits_Official" Association="Police.Store.FK_Cop_inherits_Official">
+      <End Role="Official" EntitySet="Employees_Official" />
+      <End Role="Cop" EntitySet="Employees_Cop" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Clerk_inherits_Official" Association="Police.Store.FK_Clerk_inherits_Official">
+      <End Role="Official" EntitySet="Employees_Official" />
+      <End Role="Clerk" EntitySet="Employees_Clerk" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Support_inherits_Employee" Association="Police.Store.FK_Support_inherits_Employee">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="Support" EntitySet="Employees_Support" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Employees">
+    <Key>
+      <PropertyRef Name="JMBG" />
+    </Key>
+    <Property Name="JMBG" Type="nvarchar" Nullable="false" MaxLength="450" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Type" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Ranks">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Specialties">
+    <Key>
+      <PropertyRef Name="SpecialtyId" />
+    </Key>
+    <Property Name="SpecialtyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Stations">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Divisions">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Station_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Equipments">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="StationId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Warrants">
+    <Key>
+      <PropertyRef Name="DateOfWarrant" />
+    </Key>
+    <Property Name="DateOfWarrant" Type="datetime" Nullable="false" />
+    <Property Name="Station_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Employees_Official">
+    <Key>
+      <PropertyRef Name="JMBG" />
+    </Key>
+    <Property Name="StationId" Type="int" Nullable="false" />
+    <Property Name="OfficialType" Type="int" Nullable="false" />
+    <Property Name="JMBG" Type="nvarchar" Nullable="false" MaxLength="450" />
+  </EntityType>
+  <EntityType Name="Employees_Cop">
+    <Key>
+      <PropertyRef Name="JMBG" />
+    </Key>
+    <Property Name="RankId" Type="int" Nullable="false" />
+    <Property Name="JMBG" Type="nvarchar" Nullable="false" MaxLength="450" />
+  </EntityType>
+  <EntityType Name="Employees_Clerk">
+    <Key>
+      <PropertyRef Name="JMBG" />
+    </Key>
+    <Property Name="License" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="SpecialtySpecialtyId" Type="int" Nullable="true" />
+    <Property Name="JMBG" Type="nvarchar" Nullable="false" MaxLength="450" />
+  </EntityType>
+  <EntityType Name="Employees_Support">
+    <Key>
+      <PropertyRef Name="JMBG" />
+    </Key>
+    <Property Name="JMBG" Type="nvarchar" Nullable="false" MaxLength="450" />
+  </EntityType>
+  <EntityType Name="WarrantCop">
+    <Key>
+      <PropertyRef Name="Warrants_DateOfWarrant" />
+      <PropertyRef Name="Cops_JMBG" />
+    </Key>
+    <Property Name="Warrants_DateOfWarrant" Type="datetime" Nullable="false" />
+    <Property Name="Cops_JMBG" Type="nvarchar" Nullable="false" MaxLength="450" />
+  </EntityType>
+  <EntityType Name="WarrantClerk">
+    <Key>
+      <PropertyRef Name="Warrants_DateOfWarrant" />
+      <PropertyRef Name="Clerks_JMBG" />
+    </Key>
+    <Property Name="Warrants_DateOfWarrant" Type="datetime" Nullable="false" />
+    <Property Name="Clerks_JMBG" Type="nvarchar" Nullable="false" MaxLength="450" />
+  </EntityType>
+  <Association Name="CopRank">
+    <End Role="Cop" Type="Police.Store.Employees_Cop" Multiplicity="*" />
+    <End Role="Rank" Type="Police.Store.Ranks" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Rank">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Cop">
+        <PropertyRef Name="RankId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ClerkSpecialty">
+    <End Role="Clerk" Type="Police.Store.Employees_Clerk" Multiplicity="*" />
+    <End Role="Specialty" Type="Police.Store.Specialties" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Specialty">
+        <PropertyRef Name="SpecialtyId" />
+      </Principal>
+      <Dependent Role="Clerk">
+        <PropertyRef Name="SpecialtySpecialtyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OfficialStation">
+    <End Role="Official" Type="Police.Store.Employees_Official" Multiplicity="*" />
+    <End Role="Station" Type="Police.Store.Stations" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Station">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Official">
+        <PropertyRef Name="StationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="DivisionStation">
+    <End Role="Division" Type="Police.Store.Divisions" Multiplicity="*" />
+    <End Role="Station" Type="Police.Store.Stations" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Station">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Division">
+        <PropertyRef Name="Station_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="EquipmentStation">
+    <End Role="Equipment" Type="Police.Store.Equipments" Multiplicity="*" />
+    <End Role="Station" Type="Police.Store.Stations" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Station">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Equipment">
+        <PropertyRef Name="StationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="WarrantStation">
+    <End Role="Warrant" Type="Police.Store.Warrants" Multiplicity="*" />
+    <End Role="Station" Type="Police.Store.Stations" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Station">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Warrant">
+        <PropertyRef Name="Station_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WarrantCop_Warrant">
+    <End Role="Warrant" Type="Police.Store.Warrants" Multiplicity="1" />
+    <End Role="WarrantCop" Type="Police.Store.WarrantCop" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Warrant">
+        <PropertyRef Name="DateOfWarrant" />
+      </Principal>
+      <Dependent Role="WarrantCop">
+        <PropertyRef Name="Warrants_DateOfWarrant" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WarrantCop_Cop">
+    <End Role="WarrantCop" Type="Police.Store.WarrantCop" Multiplicity="*" />
+    <End Role="Cop" Type="Police.Store.Employees_Cop" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Cop">
+        <PropertyRef Name="JMBG" />
+      </Principal>
+      <Dependent Role="WarrantCop">
+        <PropertyRef Name="Cops_JMBG" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WarrantClerk_Warrant">
+    <End Role="Warrant" Type="Police.Store.Warrants" Multiplicity="1" />
+    <End Role="WarrantClerk" Type="Police.Store.WarrantClerk" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Warrant">
+        <PropertyRef Name="DateOfWarrant" />
+      </Principal>
+      <Dependent Role="WarrantClerk">
+        <PropertyRef Name="Warrants_DateOfWarrant" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WarrantClerk_Clerk">
+    <End Role="WarrantClerk" Type="Police.Store.WarrantClerk" Multiplicity="*" />
+    <End Role="Clerk" Type="Police.Store.Employees_Clerk" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Clerk">
+        <PropertyRef Name="JMBG" />
+      </Principal>
+      <Dependent Role="WarrantClerk">
+        <PropertyRef Name="Clerks_JMBG" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Official_inherits_Employee">
+    <End Role="Employee" Type="Police.Store.Employees" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Official" Type="Police.Store.Employees_Official" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="JMBG" />
+      </Principal>
+      <Dependent Role="Official">
+        <PropertyRef Name="JMBG" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cop_inherits_Official">
+    <End Role="Official" Type="Police.Store.Employees_Official" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Cop" Type="Police.Store.Employees_Cop" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Official">
+        <PropertyRef Name="JMBG" />
+      </Principal>
+      <Dependent Role="Cop">
+        <PropertyRef Name="JMBG" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Clerk_inherits_Official">
+    <End Role="Official" Type="Police.Store.Employees_Official" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Clerk" Type="Police.Store.Employees_Clerk" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Official">
+        <PropertyRef Name="JMBG" />
+      </Principal>
+      <Dependent Role="Clerk">
+        <PropertyRef Name="JMBG" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Support_inherits_Employee">
+    <End Role="Employee" Type="Police.Store.Employees" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Support" Type="Police.Store.Employees_Support" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="JMBG" />
+      </Principal>
+      <Dependent Role="Support">
+        <PropertyRef Name="JMBG" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Police" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="PoliceContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Employees" EntityType="Police.Employee" />
+          <EntitySet Name="Ranks" EntityType="Police.Rank" />
+          <AssociationSet Name="CopRank" Association="Police.CopRank">
+            <End Role="Cop" EntitySet="Employees" />
+            <End Role="Rank" EntitySet="Ranks" />
+          </AssociationSet>
+          <EntitySet Name="Specialties" EntityType="Police.Specialty" />
+          <AssociationSet Name="ClerkSpecialty" Association="Police.ClerkSpecialty">
+            <End Role="Clerk" EntitySet="Employees" />
+            <End Role="Specialty" EntitySet="Specialties" />
+          </AssociationSet>
+          <EntitySet Name="Stations" EntityType="Police.Station" />
+          <AssociationSet Name="OfficialStation" Association="Police.OfficialStation">
+            <End Role="Official" EntitySet="Employees" />
+            <End Role="Station" EntitySet="Stations" />
+          </AssociationSet>
+          <EntitySet Name="Divisions" EntityType="Police.Division" />
+          <AssociationSet Name="DivisionStation" Association="Police.DivisionStation">
+            <End Role="Division" EntitySet="Divisions" />
+            <End Role="Station" EntitySet="Stations" />
+          </AssociationSet>
+          <EntitySet Name="Equipments" EntityType="Police.Equipment" />
+          <AssociationSet Name="EquipmentStation" Association="Police.EquipmentStation">
+            <End Role="Equipment" EntitySet="Equipments" />
+            <End Role="Station" EntitySet="Stations" />
+          </AssociationSet>
+          <EntitySet Name="Warrants" EntityType="Police.Warrant" />
+          <AssociationSet Name="WarrantCop" Association="Police.WarrantCop">
+            <End Role="Warrant" EntitySet="Warrants" />
+            <End Role="Cop" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="WarrantClerk" Association="Police.WarrantClerk">
+            <End Role="Warrant" EntitySet="Warrants" />
+            <End Role="Clerk" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="WarrantStation" Association="Police.WarrantStation">
+            <End Role="Warrant" EntitySet="Warrants" />
+            <End Role="Station" EntitySet="Stations" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Employee" Abstract="true">
+          <Key>
+            <PropertyRef Name="JMBG" />
+          </Key>
+          <Property Name="JMBG" Type="String" Nullable="false" annotation:StoreGeneratedPattern="None" MaxLength="450" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="LastName" Type="String" Nullable="false" />
+          <Property Name="Type" Type="Police.EmployeeTypes" Nullable="false" />
+        </EntityType>
+        <EnumType Name="EmployeeTypes">
+          <Member Name="OfficialStaff" />
+          <Member Name="SupportStaff" />
+        </EnumType>
+        <EntityType Name="Support" BaseType="Police.Employee" />
+        <EntityType Name="Official" BaseType="Police.Employee" >
+          <NavigationProperty Name="Station" Relationship="Police.OfficialStation" FromRole="Official" ToRole="Station" />
+          <Property Name="StationId" Type="Int32" Nullable="false" />
+          <Property Name="OfficialType" Type="Police.OfficialType" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Clerk" BaseType="Police.Official" >
+          <Property Name="License" Type="String" Nullable="false" />
+          <NavigationProperty Name="Specialty" Relationship="Police.ClerkSpecialty" FromRole="Clerk" ToRole="Specialty" />
+          <Property Name="SpecialtySpecialtyId" Type="Int32" Nullable="true" />
+          <NavigationProperty Name="Warrants" Relationship="Police.WarrantClerk" FromRole="Clerk" ToRole="Warrant" />
+        </EntityType>
+        <EntityType Name="Cop" BaseType="Police.Official" >
+          <NavigationProperty Name="Rank" Relationship="Police.CopRank" FromRole="Cop" ToRole="Rank" />
+          <Property Name="RankId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Warrants" Relationship="Police.WarrantCop" FromRole="Cop" ToRole="Warrant" />
+        </EntityType>
+        <EntityType Name="Rank">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Cops" Relationship="Police.CopRank" FromRole="Rank" ToRole="Cop" />
+        </EntityType>
+        <Association Name="CopRank">
+          <End Type="Police.Cop" Role="Cop" Multiplicity="*" />
+          <End Type="Police.Rank" Role="Rank" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Rank">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cop">
+              <PropertyRef Name="RankId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Specialty">
+          <Key>
+            <PropertyRef Name="SpecialtyId" />
+          </Key>
+          <Property Name="SpecialtyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Clerks" Relationship="Police.ClerkSpecialty" FromRole="Specialty" ToRole="Clerk" />
+        </EntityType>
+        <Association Name="ClerkSpecialty">
+          <End Type="Police.Clerk" Role="Clerk" Multiplicity="*" />
+          <End Type="Police.Specialty" Role="Specialty" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Specialty">
+              <PropertyRef Name="SpecialtyId" />
+            </Principal>
+            <Dependent Role="Clerk">
+              <PropertyRef Name="SpecialtySpecialtyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Station">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Officials" Relationship="Police.OfficialStation" FromRole="Station" ToRole="Official" />
+          <NavigationProperty Name="Divisions" Relationship="Police.DivisionStation" FromRole="Station" ToRole="Division" />
+          <NavigationProperty Name="Equipments" Relationship="Police.EquipmentStation" FromRole="Station" ToRole="Equipment" />
+          <NavigationProperty Name="Warrants" Relationship="Police.WarrantStation" FromRole="Station" ToRole="Warrant" />
+        </EntityType>
+        <Association Name="OfficialStation">
+          <End Type="Police.Official" Role="Official" Multiplicity="*" />
+          <End Type="Police.Station" Role="Station" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Official">
+              <PropertyRef Name="StationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Division">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Station" Relationship="Police.DivisionStation" FromRole="Division" ToRole="Station" />
+        </EntityType>
+        <Association Name="DivisionStation">
+          <End Type="Police.Division" Role="Division" Multiplicity="*" />
+          <End Type="Police.Station" Role="Station" Multiplicity="1" />
+        </Association>
+        <EntityType Name="Equipment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Station" Relationship="Police.EquipmentStation" FromRole="Equipment" ToRole="Station" />
+          <Property Name="StationId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="EquipmentStation">
+          <End Type="Police.Equipment" Role="Equipment" Multiplicity="*" />
+          <End Type="Police.Station" Role="Station" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Equipment">
+              <PropertyRef Name="StationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Warrant">
+          <Key>
+            <PropertyRef Name="DateOfWarrant" />
+          </Key>
+          <Property Name="DateOfWarrant" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Cops" Relationship="Police.WarrantCop" FromRole="Warrant" ToRole="Cop" />
+          <NavigationProperty Name="Clerks" Relationship="Police.WarrantClerk" FromRole="Warrant" ToRole="Clerk" />
+          <NavigationProperty Name="Station" Relationship="Police.WarrantStation" FromRole="Warrant" ToRole="Station" />
+        </EntityType>
+        <Association Name="WarrantCop">
+          <End Type="Police.Warrant" Role="Warrant" Multiplicity="*" />
+          <End Type="Police.Cop" Role="Cop" Multiplicity="*" />
+        </Association>
+        <Association Name="WarrantClerk">
+          <End Type="Police.Warrant" Role="Warrant" Multiplicity="*" />
+          <End Type="Police.Clerk" Role="Clerk" Multiplicity="*" />
+        </Association>
+        <Association Name="WarrantStation">
+          <End Type="Police.Warrant" Role="Warrant" Multiplicity="*" />
+          <End Type="Police.Station" Role="Station" Multiplicity="1" />
+        </Association>
+        <EnumType Name="OfficialType">
+          <Member Name="Cop" />
+          <Member Name="Clerk" />
+        </EnumType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="PoliceStoreContainer" CdmEntityContainer="PoliceContainer">
+    <EntitySetMapping Name="Employees">
+      <EntityTypeMapping TypeName="IsTypeOf(Police.Employee)">
+        <MappingFragment StoreEntitySet="Employees">
+          <ScalarProperty Name="JMBG" ColumnName="JMBG" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(Police.Official)">
+        <MappingFragment StoreEntitySet="Employees_Official">
+          <ScalarProperty Name="JMBG" ColumnName="JMBG" />
+          <ScalarProperty Name="StationId" ColumnName="StationId" />
+          <ScalarProperty Name="OfficialType" ColumnName="OfficialType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(Police.Cop)">
+        <MappingFragment StoreEntitySet="Employees_Cop">
+          <ScalarProperty Name="JMBG" ColumnName="JMBG" />
+          <ScalarProperty Name="RankId" ColumnName="RankId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(Police.Clerk)">
+        <MappingFragment StoreEntitySet="Employees_Clerk">
+          <ScalarProperty Name="JMBG" ColumnName="JMBG" />
+          <ScalarProperty Name="License" ColumnName="License" />
+          <ScalarProperty Name="SpecialtySpecialtyId" ColumnName="SpecialtySpecialtyId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(Police.Support)">
+        <MappingFragment StoreEntitySet="Employees_Support">
+          <ScalarProperty Name="JMBG" ColumnName="JMBG" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ranks">
+      <EntityTypeMapping TypeName="IsTypeOf(Police.Rank)">
+        <MappingFragment StoreEntitySet="Ranks">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Specialties">
+      <EntityTypeMapping TypeName="IsTypeOf(Police.Specialty)">
+        <MappingFragment StoreEntitySet="Specialties">
+          <ScalarProperty Name="SpecialtyId" ColumnName="SpecialtyId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Stations">
+      <EntityTypeMapping TypeName="IsTypeOf(Police.Station)">
+        <MappingFragment StoreEntitySet="Stations">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Divisions">
+      <EntityTypeMapping TypeName="IsTypeOf(Police.Division)">
+        <MappingFragment StoreEntitySet="Divisions">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Equipments">
+      <EntityTypeMapping TypeName="IsTypeOf(Police.Equipment)">
+        <MappingFragment StoreEntitySet="Equipments">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="StationId" ColumnName="StationId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Warrants">
+      <EntityTypeMapping TypeName="IsTypeOf(Police.Warrant)">
+        <MappingFragment StoreEntitySet="Warrants">
+          <ScalarProperty Name="DateOfWarrant" ColumnName="DateOfWarrant" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="DivisionStation" TypeName="Police.DivisionStation" StoreEntitySet="Divisions">
+      <EndProperty Name="Station">
+        <ScalarProperty Name="Id" ColumnName="Station_Id" />
+      </EndProperty>
+      <EndProperty Name="Division">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="WarrantCop" TypeName="Police.WarrantCop" StoreEntitySet="WarrantCop">
+      <EndProperty Name="Warrant">
+        <ScalarProperty Name="DateOfWarrant" ColumnName="Warrants_DateOfWarrant" />
+      </EndProperty>
+      <EndProperty Name="Cop">
+        <ScalarProperty Name="JMBG" ColumnName="Cops_JMBG" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="WarrantClerk" TypeName="Police.WarrantClerk" StoreEntitySet="WarrantClerk">
+      <EndProperty Name="Warrant">
+        <ScalarProperty Name="DateOfWarrant" ColumnName="Warrants_DateOfWarrant" />
+      </EndProperty>
+      <EndProperty Name="Clerk">
+        <ScalarProperty Name="JMBG" ColumnName="Clerks_JMBG" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="WarrantStation" TypeName="Police.WarrantStation" StoreEntitySet="Warrants">
+      <EndProperty Name="Station">
+        <ScalarProperty Name="Id" ColumnName="Station_Id" />
+      </EndProperty>
+      <EndProperty Name="Warrant">
+        <ScalarProperty Name="DateOfWarrant" ColumnName="DateOfWarrant" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
