@@ -137,7 +137,7 @@ namespace Milicija.ViewModels
                 if (filterTipZaposlenogSelected != value)
                 {
                     filterTipZaposlenogSelected = value;
-                    if (value.Id == 0)
+                    if (value != null && value.Id == 0)
                     {
                         FilterTipSluzbenogLicaSelected = FilterTipSluzbenogLica.FirstOrDefault();
                         FilterTipSluzbenogLicaEnabled = true;
@@ -172,6 +172,29 @@ namespace Milicija.ViewModels
                 if (filterTipSluzbenogLicaSelected != value)
                 {
                     filterTipSluzbenogLicaSelected = value;
+                    if (value != null && value.Id == 0)
+                    {
+                        FilterCinEnabled = true;
+                        FilterCinSelected = FilterCin.FirstOrDefault();
+
+                        FilterSpecijalnostEnabled = false;
+                        FilterSpecijalnostSelected = null;
+                    }
+                    else if (value != null && value.Id == 1)
+                    {
+                        FilterSpecijalnostEnabled = true;
+                        FilterSpecijalnostSelected = FilterSpecijalnost.FirstOrDefault();
+
+                        FilterCinEnabled = false;
+                        FilterCinSelected = null;
+                    }
+                    else
+                    {
+                        FilterCinEnabled = false;
+                        FilterCinSelected = null;
+                        FilterSpecijalnostEnabled = false;
+                        FilterSpecijalnostSelected = null;
+                    }
                     NotifyPropertyChanged();
                 }
             }
@@ -401,7 +424,7 @@ namespace Milicija.ViewModels
 
             FilterTipoviSluzbenogLica = new ObservableCollection<FilterModel>();
             FilterTipoviSluzbenogLica.Add(new FilterModel { Id = 0, Name = "Svi" });
-            FilterTipoviSluzbenogLica.Add(new FilterModel { Id = 1, Name = "Drotovi" });
+            FilterTipoviSluzbenogLica.Add(new FilterModel { Id = 1, Name = "Policajci" });
             FilterTipoviSluzbenogLica.Add(new FilterModel { Id = 2, Name = "Sudski cinovnici" });
 
             FilterTipoviSluzbenogLicaSelected = FilterTipoviSluzbenogLica.FirstOrDefault();
@@ -414,7 +437,7 @@ namespace Milicija.ViewModels
             FilterTipoviZaposlenogSelected = FilterTipZaposlenog.FirstOrDefault();
 
             FilterTipSluzbenogLica = new ObservableCollection<FilterModel>();
-            FilterTipSluzbenogLica.Add(new FilterModel { Id = 0, Name = "Drot" });
+            FilterTipSluzbenogLica.Add(new FilterModel { Id = 0, Name = "Policajac" });
             FilterTipSluzbenogLica.Add(new FilterModel { Id = 1, Name = "Sudski cinovnik" });
 
             FilterTipSluzbenogLicaSelected = null;
@@ -477,9 +500,21 @@ namespace Milicija.ViewModels
                     FilterTipSluzbenogLicaEnabled = true;
 
                     if ((model as Official).OfficialType == OfficialType.Cop)
+                    {
                         FilterTipSluzbenogLicaSelected = FilterTipSluzbenogLica[0];
+                        FilterCinEnabled = true;
+                        FilterCinSelected = FilterCin.SingleOrDefault(x => x.Name == (model as Cop).Rank.Name);
+                        FilterSpecijalnostSelected = null;
+                        FilterSpecijalnostEnabled = false;
+                    }
                     else if ((model as Official).OfficialType == OfficialType.Clerk)
+                    {
                         FilterTipSluzbenogLicaSelected = FilterTipSluzbenogLica[1];
+                        FilterSpecijalnostEnabled = true;
+                        FilterSpecijalnostSelected = FilterSpecijalnost.SingleOrDefault(x => x.Name == (model as Clerk).Specialty.Name);
+                        FilterCinSelected = null;
+                        FilterCinEnabled = false;
+                    }
                     else
                         FilterTipSluzbenogLicaSelected = null;
 
@@ -489,12 +524,19 @@ namespace Milicija.ViewModels
                     FilterTipZaposlenogSelected = FilterTipZaposlenog[1];
                     FilterTipSluzbenogLicaSelected = null;
                     FilterTipSluzbenogLicaEnabled = false;
+                    FilterCinSelected = null;
+                    FilterCinEnabled = false;
+                    FilterSpecijalnostSelected = null;
+                    FilterSpecijalnostEnabled = false;
                 }
                 else
                 {
-                    FilterTipZaposlenogSelected = null;
                     FilterTipSluzbenogLicaSelected = null;
                     FilterTipSluzbenogLicaEnabled = false;
+                    FilterCinSelected = null;
+                    FilterCinEnabled = false;
+                    FilterSpecijalnostSelected = null;
+                    FilterSpecijalnostEnabled = false;
                 }
             }
             else
@@ -502,7 +544,12 @@ namespace Milicija.ViewModels
                 Jmbg = string.Empty;
                 Name = string.Empty;
                 LastName = string.Empty;
-                FilterTipZaposlenogSelected = null;
+                FilterTipSluzbenogLicaSelected = null;
+                FilterTipSluzbenogLicaEnabled = false;
+                FilterCinSelected = null;
+                FilterCinEnabled = false;
+                FilterSpecijalnostSelected = null;
+                FilterSpecijalnostEnabled = false;
             }
             
         }
@@ -576,24 +623,89 @@ namespace Milicija.ViewModels
 
         private void addEmployee(object param)
         {
-            
+            if (FilterTipZaposlenogSelected != null && FilterTipZaposlenogSelected.Id == 1)
+            {
+                pc.Employees.Add(new Support { JMBG = Jmbg, Name = Name, LastName = LastName, Type = EmployeeTypes.SupportStaff });
+                pc.SaveChanges();
+            }
+            else
+            {
+                if (FilterTipSluzbenogLicaSelected != null && FilterTipSluzbenogLicaSelected.Id == 0)
+                {
+                    Cop c = new Cop() { JMBG = Jmbg, Name = Name, LastName = LastName, Type = EmployeeTypes.OfficialStaff, OfficialType = OfficialType.Cop };
+
+                    if (FilterCinSelected != null)
+                        c.Rank = Cinovi.FirstOrDefault(x => x.Name == FilterCinSelected.Name);
+
+                    pc.Employees.Add(c);
+                    pc.SaveChanges();
+                }
+                else if (FilterTipSluzbenogLicaSelected != null && FilterTipSluzbenogLicaSelected.Id == 1)
+                {
+                    Clerk cl = new Clerk() { JMBG = Jmbg, Name = Name, LastName = LastName, Type = EmployeeTypes.OfficialStaff, OfficialType = OfficialType.Clerk };
+
+                    if (FilterCinSelected != null)
+                        cl.Specialty = Specijalnosti.FirstOrDefault(x => x.Name == FilterSpecijalnostSelected.Name);
+
+                    pc.Employees.Add(cl);
+                    pc.SaveChanges();
+                }
+            }
         }
 
         private bool canAddEmployee(object param)
         {
-            return false;
+            if (ZaposleniSourceSelected != null || string.IsNullOrEmpty(Jmbg) || string.IsNullOrEmpty(Name)|| string.IsNullOrEmpty(LastName) || FilterTipZaposlenogSelected == null)
+                return false;
+            if (FilterTipZaposlenogSelected != null && FilterTipZaposlenogSelected.Id == 0)
+            {
+                if (FilterCinSelected == null)
+                    return false;
+            }
+            else if (FilterTipZaposlenogSelected != null && FilterTipZaposlenogSelected.Id == 1)
+            {
+                if (FilterSpecijalnostSelected == null)
+                    return false;
+            }
+            return true;
         }
 
         public ICommand EditEmployeeCommand { get { return new RelayCommand(editEmployee, canEditEmployee); } }
 
         private void editEmployee(object param)
         {
+            pc.Employees.FirstOrDefault(x => x.JMBG == ZaposleniSourceSelected.JMBG).Name = Name;
+            pc.Employees.FirstOrDefault(x => x.JMBG == ZaposleniSourceSelected.JMBG).LastName = LastName;
+            
+            if (FilterTipZaposlenogSelected.Id == 0)
+            {
+                pc.Employees.FirstOrDefault(x => x.JMBG == ZaposleniSourceSelected.JMBG).Type = EmployeeTypes.OfficialStaff;
+            }
+            else if (FilterTipZaposlenogSelected.Id == 1)
+                pc.Employees.FirstOrDefault(x => x.JMBG == ZaposleniSourceSelected.JMBG).Type = EmployeeTypes.SupportStaff;
 
+            pc.SaveChanges();
         }
 
         private bool canEditEmployee(object param)
         {
-            return false;
+            if (ZaposleniSourceSelected == null || string.IsNullOrEmpty(Jmbg) || string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(LastName) || FilterTipZaposlenogSelected == null)
+                return false;
+            if (pc.Employees.FirstOrDefault(x => x.JMBG == Jmbg) != null)
+                return false;
+            if (FilterTipZaposlenogSelected != null && FilterTipZaposlenogSelected.Id == 0)
+            {
+                if (FilterCinSelected == null)
+                    return false;
+            }
+            else if (FilterTipZaposlenogSelected != null && FilterTipZaposlenogSelected.Id == 1)
+            {
+                if (FilterSpecijalnostSelected == null)
+                    return false;
+            }
+
+
+            return true;
         }
 
         public ICommand DeleteEmployeeCommand { get { return new RelayCommand(deleteEmployee, canDeleteEmployee); } }
@@ -605,7 +717,7 @@ namespace Milicija.ViewModels
 
         private bool canDeleteEmployee(object param)
         {
-            return false;
+            return ZaposleniSourceSelected != null;
         }
 
         public ICommand CancelCommand { get { return new RelayCommand(cancel, canCancel); } }
