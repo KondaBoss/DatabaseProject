@@ -662,7 +662,12 @@ namespace Milicija.ViewModels
                 if (FilterCinSelected == null)
                     return false;
             }
-            else if (FilterTipZaposlenogSelected != null && FilterTipZaposlenogSelected.Id == 1)
+            if (FilterTipSluzbenogLicaSelected != null && FilterTipSluzbenogLicaSelected.Id == 0)
+            {
+                if (FilterCinSelected == null)
+                    return false;
+            }
+            else if (FilterTipSluzbenogLicaSelected != null && FilterTipSluzbenogLicaSelected.Id == 1)
             {
                 if (FilterSpecijalnostSelected == null)
                     return false;
@@ -703,8 +708,6 @@ namespace Milicija.ViewModels
                 if (FilterSpecijalnostSelected == null)
                     return false;
             }
-
-
             return true;
         }
 
@@ -712,7 +715,7 @@ namespace Milicija.ViewModels
 
         private void deleteEmployee(object param)
         {
-
+            // IsDeleted = true
         }
 
         private bool canDeleteEmployee(object param)
@@ -725,6 +728,13 @@ namespace Milicija.ViewModels
         private void cancel(object param)
         {
             ZaposleniSourceSelected = null;
+            Jmbg = string.Empty;
+            Name = string.Empty;
+            LastName = string.Empty;
+            FilterTipZaposlenogSelected = FilterTipZaposlenog.FirstOrDefault();
+            FilterTipSluzbenogLicaSelected = FilterTipSluzbenogLica.FirstOrDefault();
+            FilterCinSelected = FilterCin.FirstOrDefault();
+            FilterSpecijalnostSelected = null;
         }
 
         private bool canCancel(object param)
