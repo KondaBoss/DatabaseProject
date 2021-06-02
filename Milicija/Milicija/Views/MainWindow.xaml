@@ -15,36 +15,13 @@
             <Setter Property="Width" Value="50" />
         </Style>
 
-        <Style x:Key="OkIconStyle" TargetType="Image">
-            <Setter Property="Height" Value="30" />
-            <Setter Property="Width" Value="30" />
-            <Setter Property="Visibility" Value="Visible" />
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding StanjeKriticno}" Value="True">
-                    <Setter Property="Visibility" Value="Collapsed" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="WarningIconStyle" TargetType="Image">
-            <Setter Property="Height" Value="30" />
-            <Setter Property="Width" Value="30" />
-            <Setter Property="Visibility" Value="Collapsed" />
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding StanjeKriticno}" Value="True">
-                    <Setter Property="Visibility" Value="Visible" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-
-        <Style x:Key="PutTextBlockStyle" TargetType="TextBlock">
+        <Style x:Key="ClassicTextBlockStyle" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="TextAlignment" Value="Right" />
             <Setter Property="Margin" Value="0,0,4,0" />
         </Style>
 
-        <Style x:Key="PutBorderStyle" TargetType="Border">
+        <Style x:Key="ClassicBorderStyle" TargetType="Border">
             <Setter Property="Background" Value="LightYellow" />
         </Style>
 
@@ -64,14 +41,6 @@
             <Setter Property="Background" Value="White" />
             <Setter Property="Margin" Value="5,0,0,0" />
         </Style>
-
-        <Style x:Key="ValidationTextBlockStyle" TargetType="TextBlock">
-            <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="TextAlignment" Value="Left" />
-            <Setter Property="Text" Value="Invalid input" />
-            <Setter Property="FontSize" Value="7" />
-            <Setter Property="Foreground" Value="Red" />
-        </Style>
     </Window.Resources>
     <TabControl>
         <TabItem Header="Zaposleni">
@@ -88,22 +57,22 @@
                                 <Button
                                 Content="Dodaj"
                                 Background="LightCyan"
-                                Command="{Binding Dodaj}"
+                                Command="{Binding AddEmployeeCommand}"
                                 Style="{StaticResource CrudButtonStyle}"/>
                                 <Button
                                 Content="Izmeni"
                                 Background="LightGreen"
-                                Command="{Binding Izmeni}"
+                                Command="{Binding EditEmployeeCommand}"
                                 Style="{StaticResource CrudButtonStyle}"/>
                                 <Button
                                 Content="Izbriši"
                                 Background="LightPink"
-                                Command="{Binding Izbrisi}"
+                                Command="{Binding DeleteEmployeeCommand}"
                                 Style="{StaticResource CrudButtonStyle}"/>
                                 <Button
                                 Content="Odustani"
                                 Background="LightYellow"
-                                Command="{Binding Odustani}"
+                                Command="{Binding CancelCommand}"
                                 Style="{StaticResource CrudButtonStyle}"/>
                             </StackPanel>
                             <ComboBox
@@ -143,21 +112,24 @@
                                 <RowDefinition  Height="25" />
                                 <RowDefinition  Height="15" />
                                 <RowDefinition  Height="25" />
+                                <RowDefinition  Height="15" />
+                                <RowDefinition  Height="25" />
+                                <RowDefinition  Height="15" />
+                                <RowDefinition  Height="25" />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <Border
                                 Grid.Row="0"
                                 Grid.Column="0"
-                                Style="{StaticResource PutBorderStyle}">
+                                Style="{StaticResource ClassicBorderStyle}">
                                 <TextBlock
                                     Text="JMBG"
-                                    Style="{StaticResource PutTextBlockStyle}"/>
+                                    Style="{StaticResource ClassicTextBlockStyle}"/>
                             </Border>
                             <TextBox
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                IsEnabled="{Binding IDIsEnabled}"
-                                Text="{Binding Path=IDText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2" Height="25"  Grid.RowSpan="2" VerticalAlignment="Top">
+                                Text="{Binding Path=Jmbg, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2" Height="25"  Grid.RowSpan="2" VerticalAlignment="Top">
                                 <TextBox.Style>
                                     <Style TargetType="TextBox">
                                         <Setter Property="BorderBrush" Value="#FFABADB3" />
@@ -170,20 +142,13 @@
                                     </Style>
                                 </TextBox.Style>
                             </TextBox>
-
-                            <TextBlock
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                Style="{StaticResource ValidationTextBlockStyle}"
-                                Visibility="{Binding ValidationIDTextBlockVisibility}">
-                            </TextBlock>
                             <Border
                                 Grid.Row="2"
                                 Grid.Column="0"
-                                Style="{StaticResource PutBorderStyle}">
+                                Style="{StaticResource ClassicBorderStyle}">
                                 <TextBlock 
                                     Text="Ime"
-                                    Style="{StaticResource PutTextBlockStyle}"/>
+                                    Style="{StaticResource ClassicTextBlockStyle}"/>
                             </Border>
                             <TextBox
                                 Grid.Row="2"
@@ -201,20 +166,13 @@
                                     </Style>
                                 </TextBox.Style>
                             </TextBox>
-                            <TextBlock
-                                Grid.Row="3"
-                                Grid.Column="1"
-                                Style="{StaticResource ValidationTextBlockStyle}"
-                                Visibility="{Binding ValidationBrojTextBlockVisibility}">
-                            </TextBlock>
-
                             <Border
                                 Grid.Row="4"
                                 Grid.Column="0"
-                                Style="{StaticResource PutBorderStyle}">
+                                Style="{StaticResource ClassicBorderStyle}">
                                 <TextBlock 
                                     Text="Prezime"
-                                    Style="{StaticResource PutTextBlockStyle}"/>
+                                    Style="{StaticResource ClassicTextBlockStyle}"/>
                             </Border>
                             <TextBox
                                 Grid.Row="4"
@@ -232,42 +190,69 @@
                                     </Style>
                                 </TextBox.Style>
                             </TextBox>
-                            <TextBlock
-                                Grid.Row="5"
-                                Grid.Column="1"
-                                Style="{StaticResource ValidationTextBlockStyle}"
-                                Visibility="{Binding ValidationBrojTextBlockVisibility}">
-                            </TextBlock>
-
                             <Border
                                 Grid.Row="6"
                                 Grid.Column="0"
-                                Style="{StaticResource PutBorderStyle}">
+                                Style="{StaticResource ClassicBorderStyle}">
                                 <TextBlock 
                                     Text="Tip zaposlenog"
-                                    Style="{StaticResource PutTextBlockStyle}"/>
+                                    Style="{StaticResource ClassicTextBlockStyle}"/>
                             </Border>
                             <ComboBox
                                 Grid.Row="6"
                                 Grid.Column="1"
-                                ItemsSource="{Binding TipoviPuta}"
-                                SelectedItem="{Binding TipoviPutaSelected, Mode=TwoWay}"
-                                DisplayMemberPath="Naziv"></ComboBox>
+                                ItemsSource="{Binding FilterTipZaposlenog}"
+                                SelectedItem="{Binding FilterTipZaposlenogSelected, Mode=TwoWay}"
+                                DisplayMemberPath="Name"
+                                IsEnabled="{Binding FilterTipZaposlenogEnabled}"></ComboBox>
 
                             <Border
                                 Grid.Row="8"
                                 Grid.Column="0"
-                                Style="{StaticResource PutBorderStyle}">
+                                Style="{StaticResource ClassicBorderStyle}">
                                 <TextBlock 
                                     Text="Tip sluzbenog lica"
-                                    Style="{StaticResource PutTextBlockStyle}"/>
+                                    Style="{StaticResource ClassicTextBlockStyle}"/>
                             </Border>
                             <ComboBox
                                 Grid.Row="8"
                                 Grid.Column="1"
-                                ItemsSource="{Binding TipoviPuta}"
-                                SelectedItem="{Binding TipoviPutaSelected, Mode=TwoWay}"
-                                DisplayMemberPath="Naziv"></ComboBox>
+                                ItemsSource="{Binding FilterTipSluzbenogLica}"
+                                SelectedItem="{Binding FilterTipSluzbenogLicaSelected, Mode=TwoWay}"
+                                DisplayMemberPath="Name"
+                                IsEnabled="{Binding FilterTipSluzbenogLicaEnabled}"></ComboBox>
+
+                            <Border
+                                Grid.Row="10"
+                                Grid.Column="0"
+                                Style="{StaticResource ClassicBorderStyle}">
+                                <TextBlock 
+                                    Text="Cin"
+                                    Style="{StaticResource ClassicTextBlockStyle}"/>
+                            </Border>
+                            <ComboBox
+                                Grid.Row="10"
+                                Grid.Column="1"
+                                ItemsSource="{Binding FilterCin}"
+                                SelectedItem="{Binding FilterCinSelected, Mode=TwoWay}"
+                                DisplayMemberPath="Name"
+                                IsEnabled="{Binding FilterCinEnabled}"></ComboBox>
+
+                            <Border
+                                Grid.Row="12"
+                                Grid.Column="0"
+                                Style="{StaticResource ClassicBorderStyle}">
+                                <TextBlock 
+                                    Text="Specijalnost"
+                                    Style="{StaticResource ClassicTextBlockStyle}"/>
+                            </Border>
+                            <ComboBox
+                                Grid.Row="12"
+                                Grid.Column="1"
+                                ItemsSource="{Binding FilterSpecijalnost}"
+                                SelectedItem="{Binding FilterSpecijalnostSelected, Mode=TwoWay}"
+                                DisplayMemberPath="Name"
+                                IsEnabled="{Binding FilterSpecijalnostEnabled}"></ComboBox>
                         </Grid>
                         <ListView
                             ItemsSource="{Binding ZaposleniSource}"
@@ -282,39 +267,6 @@
                             </ListView.View>
                         </ListView>
                     </DockPanel>
-
-                    <!--<Grid
-                        Visibility="{Binding ConfirmingMessageVisibility}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="17*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border
-                            Background="Black"
-                            Opacity="0.3" Grid.ColumnSpan="2">
-                        </Border>
-                        <Border
-                            Width="200"
-                            Height="100"
-                            Background="White" Grid.Column="1">
-                            <DockPanel Margin="10">
-                                <TextBlock
-                                    DockPanel.Dock="Top"
-                                    TextWrapping="Wrap"
-                                    TextAlignment="Center">Da li ste sigurni da želite da izbrišete tekući red?</TextBlock>
-                                <DockPanel>
-                                    <Button
-                                        Style="{StaticResource ConfirmingButtonsStyle}"
-                                        Command="{Binding BrisanjeOdustani}">NE</Button>
-                                    <Button
-                                        Style="{StaticResource ConfirmingButtonsStyle}"
-                                        Command="{Binding BrisanjePotvrdi}">DA</Button>
-                                    <Border
-                                        Style="{StaticResource ConfirmingBorderStyle}"/>
-                                </DockPanel>
-                            </DockPanel>
-                        </Border>
-                    </Grid>-->
                 </Grid>
             </DockPanel>
         </TabItem>

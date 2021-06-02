@@ -18,6 +18,7 @@ namespace Milicija.Database
         public Cop()
         {
             this.Warrants = new HashSet<Warrant>();
+            
         }
     
         public int RankId { get; set; }

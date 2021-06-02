@@ -1,4 +1,5 @@
 ﻿using Milicija.Database;
+using Milicija.Extras;
 using Milicija.Models;
 using System;
 using System.Collections.Generic;
@@ -10,23 +11,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace Milicija.ViewModels
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
+        PoliceContainer pc = new PoliceContainer();
         #region Constructors
 
         public MainWindowViewModel()
         {
-            Zaposleni = new ObservableCollection<Employee>();
-            Zaposleni.Add(new Official { JMBG = "1901999773630", Name = "Bogdan", LastName = "Kondic", Type = EmployeeTypes.OfficialStaff, OfficialType = OfficialType.Cop, StationId = 0 }) ;
-            Zaposleni.Add(new Official { JMBG = "0302999790034", Name = "Nikola", LastName = "Zivanovic", Type = EmployeeTypes.OfficialStaff, OfficialType = OfficialType.Clerk, StationId = 1 });
-            Zaposleni.Add(new Support { JMBG = "0510996773630", Name = "Veljko", LastName = "Djokic", Type = EmployeeTypes.SupportStaff });
+            LoadEmployees();
             LoadFilterData();
         }
-
-
         #endregion
 
         #region Fields
@@ -36,11 +34,31 @@ namespace Milicija.ViewModels
         private ObservableCollection<FilterModel> filterTipoviSluzbenogLica;
         private FilterModel filterTipoviSluzbenogLicaSelected;
 
+        private ObservableCollection<FilterModel> filterTipZaposlenog;
+        private FilterModel filterTipZaposlenogSelected;
+        private ObservableCollection<FilterModel> filterTipSluzbenogLica;
+        private FilterModel filterTipSluzbenogLicaSelected;
+
+        private ObservableCollection<FilterModel> filterCin;
+        private FilterModel filterCinSelected;
+        private ObservableCollection<FilterModel> filterSpecijalnost;
+        private FilterModel filterSpecijalnostSelected;
+
+        private ObservableCollection<Rank> cinovi;
+        private ObservableCollection<Specialty> specijalnosti;
+
         private ObservableCollection<Employee> zaposleni;
         private Employee zaposleniSelected;
         private Employee zaposleniSourceSelected;
 
         private bool filterTipoviSluzbenogLicaEnabled;
+        private bool filterTipSluzbenogLicaEnabled;
+        private bool filterCinEnabled;
+        private bool filterSpecijalnostEnabled;
+
+        private string jmbg;
+        private string name;
+        private string lastName;
 
         #endregion
 
@@ -66,6 +84,7 @@ namespace Milicija.ViewModels
                 if (filterTipoviZaposlenogSelected != value)
                 {
                     filterTipoviZaposlenogSelected = value;
+                    FilterTipoviSluzbenogLicaSelected = FilterTipoviZaposlenog.FirstOrDefault();
                     NotifyPropertyChanged();
                     NotifyPropertyChanged("ZaposleniSource");
                 }
@@ -92,6 +111,139 @@ namespace Milicija.ViewModels
                 if (filterTipoviSluzbenogLicaSelected != value)
                 {
                     filterTipoviSluzbenogLicaSelected = value;
+                    NotifyPropertyChanged("ZaposleniSource");
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public ObservableCollection<FilterModel> FilterTipZaposlenog
+        {
+            get { return filterTipZaposlenog; }
+            set
+            {
+                if (filterTipZaposlenog != value)
+                {
+                    filterTipZaposlenog = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public FilterModel FilterTipZaposlenogSelected
+        {
+            get { return filterTipZaposlenogSelected; }
+            set
+            {
+                if (filterTipZaposlenogSelected != value)
+                {
+                    filterTipZaposlenogSelected = value;
+                    if (value.Id == 0)
+                    {
+                        FilterTipSluzbenogLicaSelected = FilterTipSluzbenogLica.FirstOrDefault();
+                        FilterTipSluzbenogLicaEnabled = true;
+                    }
+                    else
+                    {
+                        FilterTipSluzbenogLicaSelected = null;
+                        FilterTipSluzbenogLicaEnabled = false;
+                    }
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public ObservableCollection<FilterModel> FilterTipSluzbenogLica
+        {
+            get { return filterTipSluzbenogLica; }
+            set
+            {
+                if (filterTipSluzbenogLica != value)
+                {
+                    filterTipSluzbenogLica = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public FilterModel FilterTipSluzbenogLicaSelected
+        {
+            get { return filterTipSluzbenogLicaSelected; }
+            set
+            {
+                if (filterTipSluzbenogLicaSelected != value)
+                {
+                    filterTipSluzbenogLicaSelected = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public ObservableCollection<FilterModel> FilterCin
+        {
+            get { return filterCin; }
+            set
+            {
+                if (filterCin != value)
+                {
+                    filterCin = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public FilterModel FilterCinSelected
+        {
+            get { return filterCinSelected; }
+            set
+            {
+                if (filterCinSelected != value)
+                {
+                    filterCinSelected = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public ObservableCollection<FilterModel> FilterSpecijalnost
+        {
+            get { return filterSpecijalnost; }
+            set
+            {
+                if (filterSpecijalnost != value)
+                {
+                    filterSpecijalnost = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public FilterModel FilterSpecijalnostSelected
+        {
+            get { return filterSpecijalnostSelected; }
+            set
+            {
+                if (filterSpecijalnostSelected != value)
+                {
+                    filterSpecijalnostSelected = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public ObservableCollection<Rank> Cinovi
+        {
+            get { return cinovi; }
+            set
+            {
+                if (cinovi != value)
+                {
+                    cinovi = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public ObservableCollection<Specialty> Specijalnosti
+        {
+            get { return specijalnosti; }
+            set
+            {
+                if (specijalnosti != value)
+                {
+                    specijalnosti = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -144,7 +296,6 @@ namespace Milicija.ViewModels
                 return source;
             }
         }
-
         public bool FilterTipoviSluzbenogLicaEnabled
         {
             get { return filterTipoviSluzbenogLicaEnabled; }
@@ -158,7 +309,81 @@ namespace Milicija.ViewModels
             }
         }
 
-        
+        public bool FilterTipSluzbenogLicaEnabled
+        {
+            get { return filterTipSluzbenogLicaEnabled; }
+            set
+            {
+                if (filterTipSluzbenogLicaEnabled != value)
+                {
+                    filterTipSluzbenogLicaEnabled = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public bool FilterCinEnabled
+        {
+            get { return filterCinEnabled; }
+            set
+            {
+                if (filterCinEnabled != value)
+                {
+                    filterCinEnabled = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public bool FilterSpecijalnostEnabled
+        {
+            get { return filterSpecijalnostEnabled; }
+            set
+            {
+                if (filterSpecijalnostEnabled != value)
+                {
+                    filterSpecijalnostEnabled = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public string Jmbg
+        {
+            get { return jmbg; }
+            set
+            {
+                if (jmbg != value)
+                {
+                    jmbg = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                if (name != value)
+                {
+                    name = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public string LastName
+        {
+            get { return lastName; }
+            set
+            {
+                if (lastName != value)
+                {
+                    lastName = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
 
         #endregion
@@ -181,22 +406,105 @@ namespace Milicija.ViewModels
 
             FilterTipoviSluzbenogLicaSelected = FilterTipoviSluzbenogLica.FirstOrDefault();
             FilterTipoviSluzbenogLicaEnabled = false;
+
+            FilterTipZaposlenog = new ObservableCollection<FilterModel>();
+            FilterTipZaposlenog.Add(new FilterModel { Id = 0, Name = "Sluzbeno lice" });
+            FilterTipZaposlenog.Add(new FilterModel { Id = 1, Name = "Pomocno osbolje" });
+
+            FilterTipoviZaposlenogSelected = FilterTipZaposlenog.FirstOrDefault();
+
+            FilterTipSluzbenogLica = new ObservableCollection<FilterModel>();
+            FilterTipSluzbenogLica.Add(new FilterModel { Id = 0, Name = "Drot" });
+            FilterTipSluzbenogLica.Add(new FilterModel { Id = 1, Name = "Sudski cinovnik" });
+
+            FilterTipSluzbenogLicaSelected = null;
+            FilterTipSluzbenogLicaEnabled = false;
+
+            Cinovi = new ObservableCollection<Rank>();
+            foreach (var item in pc.Ranks)
+            {
+                Cinovi.Add(item);
+            }
+
+            FilterCin = new ObservableCollection<FilterModel>();
+            int i = 0;
+            foreach (var item in Cinovi)
+            {
+                FilterCin.Add(new FilterModel { Id = i, Name = item.Name });
+                i++;
+            }
+
+            FilterCinSelected = null;
+            FilterCinEnabled = true;
+
+            Specijalnosti = new ObservableCollection<Specialty>();
+            foreach (var item in pc.Specialties)
+            {
+                Specijalnosti.Add(item);
+            }
+
+            FilterSpecijalnost = new ObservableCollection<FilterModel>();
+            i = 0;
+            foreach (var item in Specijalnosti)
+            {
+                FilterSpecijalnost.Add(new FilterModel { Id = i, Name = item.Name });
+                i++;
+            }
+
+            FilterSpecijalnostSelected = null;
+            FilterSpecijalnostEnabled = true;
+        }
+
+        private void LoadEmployees()
+        {
+            Zaposleni = new ObservableCollection<Employee>();
+            foreach (var item in pc.Employees)
+            {
+                Zaposleni.Add(item);
+            }
         }
 
         private void SetControlValues(Employee model)
         {
-            if (model == null)
+            if (model != null)
             {
-                //ID = 0;
-                //Broj = string.Empty;
-                //TipoviPutaSelected = TipoviPuta.FirstOrDefault();
+                Jmbg = model.JMBG;
+                Name = model.Name;
+                LastName = model.LastName;
+                if (model.Type == EmployeeTypes.OfficialStaff)
+                {
+                    FilterTipZaposlenogSelected = FilterTipZaposlenog[0];
+                    FilterTipSluzbenogLicaEnabled = true;
+
+                    if ((model as Official).OfficialType == OfficialType.Cop)
+                        FilterTipSluzbenogLicaSelected = FilterTipSluzbenogLica[0];
+                    else if ((model as Official).OfficialType == OfficialType.Clerk)
+                        FilterTipSluzbenogLicaSelected = FilterTipSluzbenogLica[1];
+                    else
+                        FilterTipSluzbenogLicaSelected = null;
+
+                }
+                else if (model.Type == EmployeeTypes.SupportStaff)
+                {
+                    FilterTipZaposlenogSelected = FilterTipZaposlenog[1];
+                    FilterTipSluzbenogLicaSelected = null;
+                    FilterTipSluzbenogLicaEnabled = false;
+                }
+                else
+                {
+                    FilterTipZaposlenogSelected = null;
+                    FilterTipSluzbenogLicaSelected = null;
+                    FilterTipSluzbenogLicaEnabled = false;
+                }
             }
             else
             {
-                //ID = put.ID;
-                //Broj = put.Broj;
-                //TipoviPutaSelected = TipoviPuta.FirstOrDefault(tp => tp.ID == put.Tip.ID);
+                Jmbg = string.Empty;
+                Name = string.Empty;
+                LastName = string.Empty;
+                FilterTipZaposlenogSelected = null;
             }
+            
         }
 
         private bool FilterZaposleniSource(object item)
@@ -216,7 +524,6 @@ namespace Milicija.ViewModels
                     if (e.Type == EmployeeTypes.OfficialStaff)
                     {
                         FilterTipoviSluzbenogLicaEnabled = true;
-                        FilterTipoviSluzbenogLicaSelected = FilterTipoviSluzbenogLica.FirstOrDefault();
                         if (FilterTipoviSluzbenogLicaSelected.Id == 0)
                         {
                             return true;
@@ -265,19 +572,53 @@ namespace Milicija.ViewModels
 
         #region Commands
 
-        //public ICommand DodajUNadgledaneCommand { get { return new RelayCommand(dodajUNadgledane, canDodajUNadgledane); } }
+        public ICommand AddEmployeeCommand { get { return new RelayCommand(addEmployee, canAddEmployee); } }
 
-        //private void dodajUNadgledane(object param)
-        //{
-        //    var placeholder = (PutPlaceholderModel)Putevi.Where(p => p.NadgledaSe && p.ID == 0).OrderBy(p => p.Index).FirstOrDefault();
+        private void addEmployee(object param)
+        {
+            
+        }
 
-        //    premestiPutUNadgledane(NenadgledaniPuteviSelected, placeholder);
-        //}
+        private bool canAddEmployee(object param)
+        {
+            return false;
+        }
 
-        //private bool canDodajUNadgledane(object param)
-        //{
-        //    return NenadgledaniPuteviSelected != null;
-        //}
+        public ICommand EditEmployeeCommand { get { return new RelayCommand(editEmployee, canEditEmployee); } }
+
+        private void editEmployee(object param)
+        {
+
+        }
+
+        private bool canEditEmployee(object param)
+        {
+            return false;
+        }
+
+        public ICommand DeleteEmployeeCommand { get { return new RelayCommand(deleteEmployee, canDeleteEmployee); } }
+
+        private void deleteEmployee(object param)
+        {
+
+        }
+
+        private bool canDeleteEmployee(object param)
+        {
+            return false;
+        }
+
+        public ICommand CancelCommand { get { return new RelayCommand(cancel, canCancel); } }
+
+        private void cancel(object param)
+        {
+            ZaposleniSourceSelected = null;
+        }
+
+        private bool canCancel(object param)
+        {
+            return true;
+        }
 
         #endregion
 

@@ -408,7 +408,7 @@
           <Member Name="SupportStaff" />
         </EnumType>
         <EntityType Name="Support" BaseType="Police.Employee" />
-        <EntityType Name="Official" BaseType="Police.Employee" >
+        <EntityType Name="Official" BaseType="Police.Employee" Abstract="false" >
           <NavigationProperty Name="Station" Relationship="Police.OfficialStation" FromRole="Official" ToRole="Station" />
           <Property Name="StationId" Type="Int32" Nullable="false" />
           <Property Name="OfficialType" Type="Police.OfficialType" Nullable="false" />
